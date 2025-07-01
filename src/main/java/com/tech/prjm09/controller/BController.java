@@ -20,6 +20,7 @@ import com.tech.prjm09.dto.BDto;
 import com.tech.prjm09.dto.ReBrdimgDto;
 import com.tech.prjm09.service.BListService;
 import com.tech.prjm09.service.BServiceInter;
+import com.tech.prjm09.service.BWriteService;
 import com.tech.prjm09.util.SearchVO;
 
 import jakarta.servlet.ServletOutputStream;
@@ -58,69 +59,15 @@ public class BController {
 		System.out.println("wirte_view() ctr");
 		return "write_view";
 	}
-	
-//	@RequestMapping("write")
-//	public String write(HttpServletRequest request, Model model) {
-//		System.out.println("write() ctr");
-//		
-//		// db에 글쓰기 동작
-////		model.addAttribute("request", request);
-////		command = new BWriteCommand();
-////		command.execute(model);
-//		
-//		String bname = request.getParameter("bname");
-//		String btitle = request.getParameter("btitle");
-//		String bcontent = request.getParameter("bcontent");
-//		iDao.write(bname, btitle, bcontent);
-//		
-//		return "redirect:list";
-//	}
-	
+		
 	@RequestMapping("write")
 	public String write(MultipartHttpServletRequest mtfRequest, Model model) {
 		System.out.println("write() ctr");
 		
+		model.addAttribute("mtfRequest", mtfRequest);
 		
-		String bname = mtfRequest.getParameter("bname");
-		String btitle = mtfRequest.getParameter("btitle");
-		String bcontent = mtfRequest.getParameter("bcontent");
-		
-		System.out.println("title: " + btitle);
-		iDao.write(bname, btitle, bcontent);
-		
-		String workPath = System.getProperty("user.dir");
-		
-//		String root = "C:\\hsts2025\\sts25_work\\prjm29replyboard_mpsupdown_multi\\"
-//				+ "src\\main\\resources\\static\\files";
-		String root = workPath + "\\src\\main\\resources\\static\\files";
-		
-		List<MultipartFile> fileList = mtfRequest.getFiles("file");
-		
-		int bid = iDao.selBid();
-		System.out.println("bid>>>" + bid);
-		
-		for (MultipartFile mf : fileList) {
-			String originalFile = mf.getOriginalFilename();
-			System.out.println("files: " + originalFile);
-			long longtime = System.currentTimeMillis();
-			
-			String changeFile = longtime + "_" + originalFile;
-			System.out.println("change files: " + changeFile);
-			
-			String pathfile = root + "\\" + changeFile;
-			try {
-				if (!originalFile.equals("")) {
-					mf.transferTo(new File(pathfile));
-					System.out.println("upload success");
-					
-					// db에 기록
-					iDao.imgwrite(bid, originalFile, changeFile);
-					System.out.println("rebrdimgtv write sucess");
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
+		bServiceInter = new BWriteService(iDao);
+		bServiceInter.execute(model);
 		
 		return "redirect:list";
 	}
