@@ -18,6 +18,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import com.tech.prjm09.dao.IDao;
 import com.tech.prjm09.dto.BDto;
 import com.tech.prjm09.dto.ReBrdimgDto;
+import com.tech.prjm09.service.BContentViewService;
 import com.tech.prjm09.service.BDownloadService;
 import com.tech.prjm09.service.BListService;
 import com.tech.prjm09.service.BServiceInter;
@@ -90,21 +91,12 @@ public class BController {
 	
 	@GetMapping("content_view")
 	public String content_view(HttpServletRequest request, Model model) {
-		System.out.println("content_view() ctr");		
-//		model.addAttribute("request", request);
-//		command = new BContentCommand();
-//		command.execute(model);
+		System.out.println("content_view() ctr");
 		
-		String bid = request.getParameter("bid");
-		iDao.upHit(bid);
-				
-		BDto dto = iDao.contentView(bid);
-		model.addAttribute("content_view", dto);
-		
-		ArrayList<ReBrdimgDto> imgList = iDao.selectImg(bid);
-		model.addAttribute("imgList", imgList);
-		
-		
+		model.addAttribute("request", request);
+		bServiceInter = new BContentViewService(iDao);
+		bServiceInter.execute(model);
+
 		return "content_view";
 	}
 	
