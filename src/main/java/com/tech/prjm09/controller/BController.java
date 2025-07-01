@@ -23,6 +23,7 @@ import com.tech.prjm09.service.BDownloadService;
 import com.tech.prjm09.service.BListService;
 import com.tech.prjm09.service.BModifyService;
 import com.tech.prjm09.service.BModifyViewService;
+import com.tech.prjm09.service.BReplyViewService;
 import com.tech.prjm09.service.BServiceInter;
 import com.tech.prjm09.service.BWriteService;
 import com.tech.prjm09.util.SearchVO;
@@ -127,14 +128,10 @@ public class BController {
 	@GetMapping("reply_view")
 	public String reply_view(HttpServletRequest request, Model model) {
 		System.out.println("reply_view() ctr");		
-//		model.addAttribute("request", request);
-//		command = new BReplyViewCommand();
-//		command.execute(model);
 		
-		String bid = request.getParameter("bid");
-		
-		BDto dto = iDao.reply_view(bid);
-		model.addAttribute("reply_view", dto);
+		model.addAttribute("request", request);
+		bServiceInter = new BReplyViewService(iDao);
+		bServiceInter.execute(model);
 		
 		return "reply_view";
 	}
