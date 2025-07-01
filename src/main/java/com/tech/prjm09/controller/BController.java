@@ -18,6 +18,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import com.tech.prjm09.dao.IDao;
 import com.tech.prjm09.dto.BDto;
 import com.tech.prjm09.dto.ReBrdimgDto;
+import com.tech.prjm09.service.BServiceInter;
 import com.tech.prjm09.util.SearchVO;
 
 import jakarta.servlet.ServletOutputStream;
@@ -27,12 +28,10 @@ import jakarta.servlet.http.HttpServletResponse;
 @Controller
 public class BController {
 	
-	private final IDao iDao;
+	private BServiceInter bServiceInter;
 	
 	@Autowired
-	public BController(IDao iDao) {
-		this.iDao = iDao;
-	}
+	private IDao iDao;
 	
 	@GetMapping("/")
 	public String index() {
