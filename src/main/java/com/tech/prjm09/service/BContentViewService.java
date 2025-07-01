@@ -22,7 +22,7 @@ public class BContentViewService implements BServiceInter {
 
 	@Override
 	public void execute(Model model) {
-		System.out.println(">>>>>>>>BListService");
+		System.out.println(">>>>>>>>BContentViewService");
 		Map<String, Object> map = model.asMap();
 		HttpServletRequest request = (HttpServletRequest) map.get("request");
 		
