@@ -18,6 +18,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import com.tech.prjm09.dao.IDao;
 import com.tech.prjm09.dto.BDto;
 import com.tech.prjm09.dto.ReBrdimgDto;
+import com.tech.prjm09.service.BDownloadService;
 import com.tech.prjm09.service.BListService;
 import com.tech.prjm09.service.BServiceInter;
 import com.tech.prjm09.service.BWriteService;
@@ -74,32 +75,15 @@ public class BController {
 	
 	@GetMapping("download")
 	public String download(HttpServletRequest request, HttpServletResponse response, Model model) throws Exception {
+		System.out.println("download() ctr");
+		
+		model.addAttribute("request", request);
+		model.addAttribute("response", response);
+		
+		bServiceInter = new BDownloadService(iDao);
+		bServiceInter.execute(model);
+		
 		String bid = request.getParameter("bid");
-		String fname = request.getParameter("f");
-		System.out.println(fname + " : " + bid);
-		
-		// 첨부파일이다
-		response.setHeader("Content-Disposition", 
-				"Attachment;filename = " + URLEncoder.encode(fname, "UTF-8"));
-		
-		String workPath = System.getProperty("user.dir");
-		String realPath = workPath + "\\src\\main\\resources\\static\\files\\" + fname;
-		
-		FileInputStream fin = new FileInputStream(realPath);
-		ServletOutputStream sout = response.getOutputStream();
-		
-		byte[] buf = new byte[1024];
-		int size = 0;
-		
-		while ((size = fin.read(buf, 0, 1024)) != -1) {
-			sout.write(buf, 0, size);
-		}
-		
-		fin.close();
-		sout.close();
-		
-//		BDto dto = iDao.contentView(bid);
-//		model.addAttribute("content_view", dto);
 		
 		return "content_view?bid = " + bid;
 	}
