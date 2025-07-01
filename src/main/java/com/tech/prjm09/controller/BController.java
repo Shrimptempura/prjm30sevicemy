@@ -10,6 +10,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.tech.prjm09.dao.IDao;
 import com.tech.prjm09.service.BContentViewService;
+import com.tech.prjm09.service.BDeleteService;
 import com.tech.prjm09.service.BDownloadService;
 import com.tech.prjm09.service.BListService;
 import com.tech.prjm09.service.BModifyService;
@@ -141,12 +142,10 @@ public class BController {
 	@RequestMapping("delete")
 	public String delete(HttpServletRequest request, Model model) {
 		System.out.println("delete ctr");
-//		model.addAttribute("request", request);
-//		command = new BDeleteCommand();
-//		command.execute(model);
-		
-		String bid = request.getParameter("bid");
-		iDao.delete(bid);
+
+		model.addAttribute("request", request);
+		bServiceInter = new BDeleteService(iDao);
+		bServiceInter.execute(model);
 		
 		return "redirect:list";
 	}
